@@ -11,6 +11,10 @@ class Client extends Model {
         }, {
             sequelize
         })
+
+    }
+    static associate(models) {
+        this.hasMany(models.ServiceOrder, { foreignKey: "client_id", as: "ServicesOrders" });
     }
 }
 

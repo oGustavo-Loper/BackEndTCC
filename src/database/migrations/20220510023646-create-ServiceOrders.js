@@ -9,15 +9,6 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
-      observation: {
-        type: Sequelize.STRING,
-      },
-      withdrawal: {
-        type: Sequelize.DATE,
-      },
-      value: {
-        type: Sequelize.FLOAT,
-      },
       client_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -45,6 +36,15 @@ module.exports = {
         references: { model: 'modelos', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      observation: {
+        type: Sequelize.STRING,
+      },
+      withdrawal: {
+        type: Sequelize.DATE,
+      },
+      value: {
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         type: Sequelize.DATE,

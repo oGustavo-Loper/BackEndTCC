@@ -21,6 +21,7 @@ routes.get('/modelos', ModeloController.index);
 
 routes.post('/serviceorder', ServiceOrderController.store);
 routes.get('/serviceorder', ServiceOrderController.index);
+routes.get('/:client_id/serviceorder', ServiceOrderController.SearchByClient);
 
 
 
