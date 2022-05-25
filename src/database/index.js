@@ -15,6 +15,10 @@ Modelo.init(connection);
 Brand.init(connection);
 ServiceOrder.init(connection);
 
+Client.associate(connection.models);
+Service.associate(connection.models);
+Modelo.associate(connection.models);
+Brand.associate(connection.models);
 ServiceOrder.associate(connection.models);
 
 

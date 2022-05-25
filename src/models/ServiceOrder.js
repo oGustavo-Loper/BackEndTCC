@@ -10,12 +10,11 @@ class ServiceOrder extends Model {
             sequelize
         })
     }
-
     static associate(models) {
-        this.belongsTo(models.Client, { foreignKey: "client_id", as: "client" },
-            models.Brand, { foreignKey: "brand_id", as: "brand" },
-            models.Modelo, { foreignKey: "modelo_id", as: "modelo" },
-            models.Service, { foreignKey: "service_id", as: "service" })
+        this.belongsTo(models.Client, { foreignKey: "client_id", as: "client" }),
+            this.belongsTo(models.Brand, { foreignKey: "brand_id", as: "brand" }),
+            this.belongsTo(models.Modelos, { foreignKey: "modelo_id", as: "modelo" }),
+            this.belongsTo(models.Service, { foreignKey: "service_id", as: "service" });
     }
 }
 

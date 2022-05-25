@@ -8,6 +8,9 @@ class Brand extends Model {
             sequelize
         })
     }
+    static associate(models) {
+        this.hasMany(models.ServiceOrder, { foreignKey: "brand_id", as: "ServicesOrdersBrands" });
+    }
 }
 
 module.exports = Brand;
