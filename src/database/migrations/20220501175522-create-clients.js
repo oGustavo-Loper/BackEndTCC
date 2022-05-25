@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false,
       },
       number: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       CPF: {
         type: Sequelize.STRING,

@@ -4,21 +4,21 @@ const dbConfig = require('../config/database');
 const Client = require('../models/Client')
 const ServiceOrder = require('../models/ServiceOrder')
 const Service = require('../models/Service')
-const Modelo = require('../models/Modelo')
-const Brand = require('../models/Brand')
+const DeviceModel = require('../models/DeviceModel')
+const DeviceBrand = require('../models/DeviceBrand')
 
 const connection = new Sequelize(dbConfig);
 
 Client.init(connection);
 Service.init(connection);
-Modelo.init(connection);
-Brand.init(connection);
+DeviceModel.init(connection);
+DeviceBrand.init(connection);
 ServiceOrder.init(connection);
 
 Client.associate(connection.models);
 Service.associate(connection.models);
-Modelo.associate(connection.models);
-Brand.associate(connection.models);
+DeviceModel.associate(connection.models);
+DeviceBrand.associate(connection.models);
 ServiceOrder.associate(connection.models);
 
 

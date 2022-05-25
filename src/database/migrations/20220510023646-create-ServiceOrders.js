@@ -23,17 +23,17 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      brand_id: {
+      DeviceBrand_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'brands', key: 'id' },
+        references: { model: 'DeviceBrands', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      modelo_id: {
+      DeviceModel_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: 'modelos', key: 'id' },
+        references: { model: 'DeviceModels', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
@@ -45,6 +45,10 @@ module.exports = {
       },
       value: {
         type: Sequelize.FLOAT,
+      },
+      open: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
       },
       createdAt: {
         type: Sequelize.DATE,

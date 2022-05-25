@@ -8,10 +8,10 @@ module.exports = {
                 association: 'client'
             },
             {
-                association: 'brand'
+                association: 'DeviceBrand'
             },
             {
-                association: 'modelo'
+                association: 'DeviceModel'
             },
             {
                 association: 'service'
@@ -29,10 +29,10 @@ module.exports = {
                 association: 'client'
             },
             {
-                association: 'brand'
+                association: 'DeviceBrand'
             },
             {
-                association: 'modelo'
+                association: 'DeviceModel'
             },
             {
                 association: 'service'
@@ -45,7 +45,7 @@ module.exports = {
     async store(req, res) {
         const { name, number, CPF, email, address,
             observation, withdrawal, value, service_id,
-            brand_id, modelo_id } = req.body;
+            DeviceBrand_id, DeviceModel_id } = req.body;
 
         if (!name || !number) {
             res.status(400).json({ error: "Nome e numero são campos obrigatórios." });
@@ -57,7 +57,7 @@ module.exports = {
         const client_id = client.id
 
         const serviceOrder = await ServiceOrder.create({
-            observation, withdrawal, value, client_id, service_id, modelo_id, brand_id
+            observation, withdrawal, value, client_id, service_id, DeviceBrand_id, DeviceModel_id
 
         });
 
