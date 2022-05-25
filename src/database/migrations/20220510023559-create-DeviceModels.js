@@ -2,16 +2,23 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('brands', {
+    await queryInterface.createTable('DeviceModels', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      brand: {
+      DeviceModel: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      DeviceBrand_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: 'DeviceBrands', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -25,6 +32,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('brands');
+    await queryInterface.dropTable('DeviceModels');
   }
 };
