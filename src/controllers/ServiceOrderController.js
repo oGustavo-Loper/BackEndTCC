@@ -3,43 +3,61 @@ const Client = require('../models/Client')
 
 module.exports = {
     async index(req, res) {
-        const servicesOrder = await ServiceOrder.findAll({
-            include: [{
-                association: 'client'
-            },
-            {
-                association: 'DeviceBrand'
-            },
-            {
-                association: 'DeviceModel'
-            },
-            {
-                association: 'service'
-            }]
-        });
+        try {
+            const servicesOrder = await ServiceOrder.findAll({
+                include: [{
+                    association: 'client'
+                },
+                {
+                    association: 'DeviceBrand'
+                },
+                {
+                    association: 'DeviceModel'
+                },
+                {
+                    association: 'service'
+                }]
+            });
 
-        return res.json(servicesOrder);
+            if (servicesOrder.length >= 1) {
+                return res.status(200).json(servicesOrder);
+            } else {
+                return res.status(400).json("Não há Ordens de Serviço");
+            }
+
+        } catch (error) {
+            return res.status(400).json({ msg: error.message });
+        }
     },
 
     async SearchByClient(req, res) {
         const { client_id } = req.params;
 
-        const client = await ServiceOrder.findByPk(client_id, {
-            include: [{
-                association: 'client'
-            },
-            {
-                association: 'DeviceBrand'
-            },
-            {
-                association: 'DeviceModel'
-            },
-            {
-                association: 'service'
-            }]
-        });
+        try {
+            const client = await ServiceOrder.findByPk(client_id, {
+                include: [{
+                    association: 'client'
+                },
+                {
+                    association: 'DeviceBrand'
+                },
+                {
+                    association: 'DeviceModel'
+                },
+                {
+                    association: 'service'
+                }]
+            });
 
-        return res.status(200).json(client);
+            if (client) {
+                return res.status(200).json(client);
+            } else {
+                return res.status(400).json("Não há Ordens de Serviço");
+            }
+
+        } catch (error) {
+            return res.status(400).json({ msg: error.message });
+        }
     },
 
     async store(req, res) {
@@ -47,21 +65,72 @@ module.exports = {
             observation, withdrawal, value, service_id,
             DeviceBrand_id, DeviceModel_id } = req.body;
 
-        if (!name || !number) {
-            res.status(400).json({ error: "Nome e numero são campos obrigatórios." });
-            return
+        if (!name) {
+            return res.status(400).json({ error: "Nome é campos obrigatórios." });
+
         }
 
-        const client = await Client.create({ name, number, CPF, email, address });
+        try {
+            const clients = await Client.findOne({
+                where: {
+                    name: name, number: number, CPF: CPF,
+                    email: email, address: address
+                }
+            });
 
-        const client_id = client.id
+            if (clients) {
+                const client_id = clients.id
+                const serviceOrder = await ServiceOrder.create({
+                    observation, withdrawal, value, client_id,
+                    service_id, DeviceBrand_id, DeviceModel_id
+                });
 
-        const serviceOrder = await ServiceOrder.create({
-            observation, withdrawal, value, client_id, service_id, DeviceBrand_id, DeviceModel_id
+                return res.status(201).json(serviceOrder);
+            } else {
+                const client = await Client.create({ name, number, CPF, email, address });
 
-        });
+                const client_id = client.id
 
-        return res.json(serviceOrder);
-    }
+                const serviceOrder = await ServiceOrder.create({
+                    observation, withdrawal, value, client_id,
+                    service_id, DeviceBrand_id, DeviceModel_id
+                });
+                console.log(clients.id)
+                return res.status(201).json(serviceOrder);
+            }
+        } catch (error) {
+            return res.status(400).json({ msg: error.message });
+        }
+
+
+        // try {
+        //     const client = await Client.create({ name, number, CPF, email, address });
+        //     const client_id = client.id
+        //     const serviceOrder = await ServiceOrder.create({
+        //         observation, withdrawal, value, client_id,
+        //         service_id, DeviceBrand_id, DeviceModel_id
+        //     });
+        //     return res.status(201).json(serviceOrder);
+        // } catch (error) {
+        //     return res.status(400).json({ msg: error.message });
+        // }
+    },
+
+    async destroy(req, res) {
+        const { id } = req.params;
+
+        try {
+            const serviceorder = await ServiceOrder.destroy({ where: { id: id } });
+
+            if (serviceorder) {
+                return res.status(200).json("Ordem de Serviço deletado");
+            } else {
+                return res.status(400).json("Não há Ordens com esse id");
+            }
+
+        } catch (error) {
+            return res.status(400).json({ msg: error.message });
+        }
+    },
 }
 
