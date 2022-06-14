@@ -46,6 +46,9 @@ module.exports = {
       value: {
         type: Sequelize.FLOAT,
       },
+      negativeValue: {
+        type: Sequelize.FLOAT,
+      },
       open: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,

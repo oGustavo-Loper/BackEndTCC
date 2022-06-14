@@ -6,6 +6,7 @@ class ServiceOrder extends Model {
             observation: DataTypes.STRING,
             withdrawal: DataTypes.DATE,
             value: DataTypes.FLOAT,
+            negativeValue: DataTypes.FLOAT,
             open: DataTypes.BOOLEAN,
         }, {
             sequelize
