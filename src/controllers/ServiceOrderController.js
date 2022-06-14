@@ -95,7 +95,7 @@ module.exports = {
                     observation, withdrawal, value, client_id,
                     service_id, DeviceBrand_id, DeviceModel_id
                 });
-                console.log(clients.id)
+
                 return res.status(201).json(serviceOrder);
             }
         } catch (error) {
