@@ -62,7 +62,7 @@ module.exports = {
 
     async store(req, res) {
         const { name, number, CPF, email, address,
-            observation, withdrawal, value, service_id,
+            observation, withdrawal, value, negativeValue, service_id,
             DeviceBrand_id, DeviceModel_id } = req.body;
 
         if (!name) {
@@ -81,7 +81,7 @@ module.exports = {
             if (clients) {
                 const client_id = clients.id
                 const serviceOrder = await ServiceOrder.create({
-                    observation, withdrawal, value, client_id,
+                    observation, withdrawal, value, negativeValue, client_id,
                     service_id, DeviceBrand_id, DeviceModel_id
                 });
 
@@ -92,7 +92,7 @@ module.exports = {
                 const client_id = client.id
 
                 const serviceOrder = await ServiceOrder.create({
-                    observation, withdrawal, value, client_id,
+                    observation, withdrawal, value, negativeValue, client_id,
                     service_id, DeviceBrand_id, DeviceModel_id
                 });
 
@@ -101,19 +101,6 @@ module.exports = {
         } catch (error) {
             return res.status(400).json({ msg: error.message });
         }
-
-
-        // try {
-        //     const client = await Client.create({ name, number, CPF, email, address });
-        //     const client_id = client.id
-        //     const serviceOrder = await ServiceOrder.create({
-        //         observation, withdrawal, value, client_id,
-        //         service_id, DeviceBrand_id, DeviceModel_id
-        //     });
-        //     return res.status(201).json(serviceOrder);
-        // } catch (error) {
-        //     return res.status(400).json({ msg: error.message });
-        // }
     },
 
     async destroy(req, res) {
