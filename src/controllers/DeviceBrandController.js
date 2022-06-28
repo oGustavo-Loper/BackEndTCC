@@ -24,6 +24,19 @@ module.exports = {
             return res.status(400).json({ error: error.message });
         }
     },
+
+    async indexByOrder(req, res) {
+        const { id } = req.params;
+
+        const model = await DeviceBrand.findByPk(id, {
+            include: { association: 'DeviceBrandModel' }
+        });
+
+        return res.status(200).json(model);
+
+    },
+
+
     async destroy(req, res) {
         const { id } = req.params;
 

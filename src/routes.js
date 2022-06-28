@@ -18,10 +18,12 @@ routes.delete('/:id/services', ServiceController.destroy);
 
 routes.post('/devicebrands', DeviceBrandController.store);
 routes.get('/devicebrands', DeviceBrandController.index);
+routes.get('/:id/devicebrands', DeviceBrandController.indexByOrder);
 routes.delete('/:id/devicebrands', DeviceBrandController.destroy);
 
 routes.post('/devicemodels', DeviceModelController.store);
 routes.get('/devicemodels', DeviceModelController.index);
+routes.get('/:DeviceBrand_id/devicemodels', DeviceModelController.indexByOrder);
 routes.delete('/:id/devicemodels', DeviceModelController.destroy);
 
 routes.post('/serviceorder', ServiceOrderController.store);
