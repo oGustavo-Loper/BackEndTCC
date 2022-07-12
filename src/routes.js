@@ -4,6 +4,8 @@ const ServiceController = require('./controllers/ServiceController');
 const DeviceBrandController = require('./controllers/DeviceBrandController');
 const DeviceModelController = require('./controllers/DeviceModelController');
 const ServiceOrderController = require('./controllers/ServiceOrderController');
+const UserController = require('./controllers/UserController');
+const login = require("./middleware/login")
 
 const routes = express('routes');
 
@@ -30,6 +32,10 @@ routes.post('/serviceorder', ServiceOrderController.store);
 routes.get('/serviceorder', ServiceOrderController.index);
 routes.get('/:client_id/serviceorder', ServiceOrderController.SearchByClient);
 routes.delete('/:id/serviceorder', ServiceOrderController.destroy);
+
+routes.get('/users', UserController.index);
+routes.post('/users', UserController.store);
+routes.post('/login', UserController.login);
 
 
 
