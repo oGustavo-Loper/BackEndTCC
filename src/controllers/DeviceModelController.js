@@ -5,7 +5,7 @@ module.exports = {
         try {
             const DeviceModels = await DeviceModel.findAll({
                 include: [{
-                    association: 'DeviceBrandModel'
+                    association: 'DeviceBrand'
                 }]
             });
 
@@ -37,7 +37,7 @@ module.exports = {
         const { DeviceBrand_id } = req.params;
 
         const model = await DeviceModel.findByPk(DeviceBrand_id, {
-            include: { association: 'DeviceBrandModel' }
+            include: { association: 'DeviceBrand' }
         });
 
         return res.status(200).json(model);
