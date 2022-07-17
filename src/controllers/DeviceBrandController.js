@@ -1,4 +1,5 @@
 const DeviceBrand = require('../models/DeviceBrand')
+const DeviceModel = require('../models/DeviceModel')
 
 module.exports = {
     async index(req, res) {
@@ -25,12 +26,21 @@ module.exports = {
         }
     },
 
+    // async indexByOrder(req, res) {
+    //     const { id } = req.params;
+
+    //     const model = await DeviceBrand.findByPk(id);
+
+    //     return res.status(200).json(model);
+
+    // },
     async indexByOrder(req, res) {
         const { id } = req.params;
 
-        const model = await DeviceBrand.findByPk(id, {
-            include: { association: 'DeviceBrandModel' }
-        });
+        if (!id) {
+            return res.status(400).json({ error: error.message });
+        }
+        const model = await DeviceModel.findAll({ where: { DeviceBrand_id: id } });
 
         return res.status(200).json(model);
 

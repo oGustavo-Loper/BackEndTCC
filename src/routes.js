@@ -30,7 +30,7 @@ routes.delete('/:id/devicemodels', DeviceModelController.destroy);
 
 routes.post('/serviceorder', ServiceOrderController.store);
 routes.get('/serviceorder', ServiceOrderController.index);
-routes.get('/:client_id/serviceorder', ServiceOrderController.SearchByClient);
+routes.get('/:id/serviceorder', ServiceOrderController.SearchByClient);
 routes.delete('/:id/serviceorder', ServiceOrderController.destroy);
 
 routes.get('/users', UserController.index);

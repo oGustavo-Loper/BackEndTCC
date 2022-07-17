@@ -10,7 +10,7 @@ class DeviceModel extends Model {
     }
     static associate(models) {
         this.hasMany(models.ServiceOrder, { foreignKey: "DeviceModel_id", as: "ServicesOrdersModels" }),
-            this.belongsTo(models.DeviceBrand, { foreignKey: "DeviceBrand_id", as: "DeviceBrandModel" });
+            this.belongsTo(models.DeviceBrand, { foreignKey: "DeviceBrand_id", as: "DeviceBrand" });
     }
 }
 

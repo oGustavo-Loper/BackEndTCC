@@ -31,10 +31,10 @@ module.exports = {
     },
 
     async SearchByClient(req, res) {
-        const { client_id } = req.params;
+        const { id } = req.params;
 
         try {
-            const client = await ServiceOrder.findByPk(client_id, {
+            const order = await ServiceOrder.findByPk(id, {
                 include: [{
                     association: 'client'
                 },
@@ -49,8 +49,8 @@ module.exports = {
                 }]
             });
 
-            if (client) {
-                return res.status(200).json(client);
+            if (order) {
+                return res.status(200).json(order);
             } else {
                 return res.status(400).json("Não há Ordens de Serviço");
             }
@@ -66,7 +66,7 @@ module.exports = {
             DeviceBrand_id, DeviceModel_id } = req.body;
 
         if (!name) {
-            return res.status(400).json({ error: "Nome é campos obrigatórios." });
+            return res.status(400).json({ error: "Nome é campo obrigatório." });
 
         }
 
