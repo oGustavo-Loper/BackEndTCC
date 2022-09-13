@@ -32,6 +32,7 @@ routes.post('/serviceorder', ServiceOrderController.store);
 routes.get('/serviceorder', ServiceOrderController.index);
 routes.get('/:id/serviceorder', ServiceOrderController.SearchByClient);
 routes.delete('/:id/serviceorder', ServiceOrderController.destroy);
+routes.put('/:id/serviceorder', ServiceOrderController.update);
 
 routes.get('/users', UserController.index);
 routes.post('/users', UserController.store);

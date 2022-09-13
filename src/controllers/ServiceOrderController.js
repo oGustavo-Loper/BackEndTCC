@@ -67,7 +67,6 @@ module.exports = {
 
         if (!name) {
             return res.status(400).json({ error: "Nome é campo obrigatório." });
-
         }
 
         try {
@@ -97,6 +96,57 @@ module.exports = {
                 });
 
                 return res.status(201).json(serviceOrder);
+            }
+        } catch (error) {
+            return res.status(400).json({ msg: error.message });
+        }
+    },
+
+    async update(req, res) {
+        const { id } = req.params;
+        let { name, number, CPF, email, address,
+            observation, withdrawal, value, negativeValue, service_id,
+            DeviceBrand_id, DeviceModel_id } = req.body;
+
+        const data = await ServiceOrder.findOne({ where: { id: id } })
+
+        if (!data) {
+            res.status(400).json({ erro: "Ordem inexistente" });
+            return;
+        }
+
+        if (!DeviceBrand_id || !DeviceModel_id) {
+            DeviceBrand_id = data.DeviceBrand_id;
+            DeviceModel_id = data.DeviceModel_id;
+        }
+
+        try {
+            const clients = await Client.findOne({
+                where: {
+                    name: name, number: number, CPF: CPF,
+                    email: email, address: address
+                }
+            });
+
+            if (clients) {
+                const client_id = clients.id
+                const updateOrder = await data.update({
+                    observation, withdrawal, value, negativeValue, client_id,
+                    service_id, DeviceBrand_id, DeviceModel_id
+                });
+
+                return res.status(201).json(updateOrder);
+            } else {
+                const client = await Client.create({ name, number, CPF, email, address });
+
+                const client_id = client.id
+
+                const updateOrder = await data.update({
+                    observation, withdrawal, value, negativeValue, client_id,
+                    service_id, DeviceBrand_id, DeviceModel_id
+                });
+
+                return res.status(201).json(updateOrder);
             }
         } catch (error) {
             return res.status(400).json({ msg: error.message });
