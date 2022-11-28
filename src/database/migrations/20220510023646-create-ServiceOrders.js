@@ -23,13 +23,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      DeviceBrand_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: { model: 'DeviceBrands', key: 'id' },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
       DeviceModel_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
