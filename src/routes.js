@@ -34,6 +34,12 @@ routes.get('/:id/serviceorder', ServiceOrderController.SearchByClient);
 routes.delete('/:id/serviceorder', ServiceOrderController.destroy);
 routes.put('/:id/serviceorder', ServiceOrderController.update);
 
+routes.post('/:ServiceOrder_id/finishServiceOrder', ServiceOrderController.finishOS);
+routes.get('/serviceorderended', ServiceOrderController.getOrdersEnded);
+
+routes.get('/paymentmethods', ServiceOrderController.getPaymentMethods)
+routes.get('/machines', ServiceOrderController.getMachines)
+
 routes.get('/users', UserController.index);
 routes.post('/users', UserController.store);
 routes.post('/login', UserController.login);
