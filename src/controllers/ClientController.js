@@ -23,6 +23,18 @@ module.exports = {
 
     },
 
+    async indexByName(req, res) {
+        const { name } = req.params;
+
+        const client = await Client.findAll({
+            where: { name: name },
+            include: { association: 'ServicesOrders' }
+        });
+
+        return res.status(200).json(client);
+
+    },
+
 
     async store(req, res) {
         const { name, number, CPF, email, address } = req.body;

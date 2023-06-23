@@ -19,9 +19,7 @@ module.exports = {
         const { DeviceBrand_id, devicemodel } = req.body;
         try {
             if (!devicemodel) {
-
-                return res.status(400).json({ error: "Campo Serviço é obrigatório" });
-
+                return res.status(400).json({ error: "Campo modelo é obrigatório" });
             }
 
             const NewDeviceModel = await DeviceModel.create({ DeviceBrand_id, devicemodel });
@@ -42,6 +40,32 @@ module.exports = {
 
         return res.status(200).json(model);
 
+    },
+
+    // async indexByDeviceBrand(req, res) {
+    //     const { DeviceBrand_id } = req.params;
+
+    //     const model = await DeviceModel.findAll({ where: { DeviceBrand_id: DeviceBrand_id } })
+
+    //     return res.status(200).json(model);
+
+    // },
+
+    async indexByDeviceBrand(req, res) {
+        try {
+            const { DeviceBrand_id } = req.params;
+
+            if (!DeviceBrand_id) {
+                return res.status(400).json({ error: 'DeviceBrand_id is required' });
+            }
+
+            const models = await DeviceModel.findAll({ where: { DeviceBrand_id } });
+
+            return res.status(200).json(models);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
     },
 
     async destroy(req, res) {

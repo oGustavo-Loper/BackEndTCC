@@ -4,6 +4,7 @@ const Payment = require('../models/Payment')
 const PaymentMethod = require('../models/PaymentMethod')
 const Machine = require('../models/Machine')
 const ServiceOrder_PaymentMethod = require('../models/ServiceOrder_PaymentMethod')
+const nodemailer = require('nodemailer');
 
 module.exports = {
     async index(req, res) {
@@ -24,11 +25,9 @@ module.exports = {
                 }]
             });
 
-            if (servicesOrder.length >= 1) {
-                return res.status(200).json(servicesOrder);
-            } else {
-                return res.status(400).json(servicesOrder);
-            }
+
+            return res.status(200).json(servicesOrder);
+
 
         } catch (error) {
             return res.status(400).json({ msg: error.message });
@@ -40,6 +39,7 @@ module.exports = {
 
         try {
             const order = await ServiceOrder.findByPk(id, {
+
                 include: [{
                     association: 'client'
                 },
@@ -56,8 +56,35 @@ module.exports = {
 
             if (order) {
                 return res.status(200).json(order);
-            } else {
-                return res.status(400).json("Não há Ordens de Serviço");
+            }
+
+        } catch (error) {
+            return res.status(400).json({ msg: error.message });
+        }
+    },
+
+    async SearchByClientClosed(req, res) {
+        const { id } = req.params;
+
+        try {
+            const order = await ServiceOrder.findByPk(id, {
+                where: { open: false },
+                include: [{
+                    association: 'client'
+                },
+                {
+                    association: 'DeviceModel',
+                    include: [{
+                        association: 'DeviceBrand'
+                    }]
+                },
+                {
+                    association: 'service'
+                }]
+            });
+
+            if (order) {
+                return res.status(200).json(order);
             }
 
         } catch (error) {
@@ -166,7 +193,7 @@ module.exports = {
             if (serviceorder) {
                 return res.status(200).json("Ordem de Serviço deletado");
             } else {
-                return res.status(400).json("Não há Ordens com esse id");
+                return res.status(200).json("Não há Ordens com esse id");
             }
 
         } catch (error) {
@@ -203,36 +230,73 @@ module.exports = {
     async getOrdersEnded(req, res) {
         try {
             const servicesOrderEnded = await ServiceOrder_PaymentMethod.findAll({
-                include: [{
-                    association: 'pagamento'
-                },
-                {
-                    association: 'ordemServico',
-                    include: [{
-                        association: 'client'
+                include: [
+                    {
+                        association: 'pagamento',
                     },
                     {
-                        association: 'DeviceModel',
-                        include: [{
-                            association: 'DeviceBrand'
-                        }]
+                        association: 'ordemServico',
+                        include: [
+                            {
+                                association: 'client',
+                            },
+                            {
+                                association: 'DeviceModel',
+                                include: [
+                                    {
+                                        association: 'DeviceBrand',
+                                    },
+                                ],
+                            },
+                            {
+                                association: 'service',
+                            },
+                        ],
                     },
-                    {
-                        association: 'service'
-                    }]
-                }]
+                ],
             });
-            const teste = servicesOrderEnded.DeviceModel_id
-            if (servicesOrderEnded.length >= 1) {
+
+            if (servicesOrderEnded.length > 0) {
                 return res.status(200).json(servicesOrderEnded);
             } else {
-                return res.status(400).json(servicesOrderEnded);
+                return res.status(404).json({ error: 'No ended orders found' });
             }
-
         } catch (error) {
-            return res.status(400).json({ msg: error.message });
+            console.error(error);
+            return res.status(500).json({ error: 'Internal server error' });
         }
     },
+
+    // async getOrdersEnded(req, res) {
+    //     try {
+    //         const servicesOrderEnded = await ServiceOrder_PaymentMethod.findAll({
+    //             include: [{
+    //                 association: 'pagamento'
+    //             },
+    //             {
+    //                 association: 'ordemServico',
+    //                 include: [{
+    //                     association: 'client'
+    //                 },
+    //                 {
+    //                     association: 'DeviceModel',
+    //                     include: [{
+    //                         association: 'DeviceBrand'
+    //                     }]
+    //                 },
+    //                 {
+    //                     association: 'service'
+    //                 }]
+    //             }]
+    //         });
+    //         if (servicesOrderEnded) {
+    //             return res.status(200).json(servicesOrderEnded);
+    //         }
+
+    //     } catch (error) {
+    //         return res.status(400).json({ msg: error.message });
+    //     }
+    // },
 
     async getPaymentMethods(req, res) {
         try {
@@ -240,8 +304,6 @@ module.exports = {
 
             if (paymentMethods.length >= 1) {
                 return res.status(200).json(paymentMethods);
-            } else {
-                return res.status(400).json(paymentMethods);
             }
 
         } catch (error) {
@@ -255,10 +317,33 @@ module.exports = {
 
             if (Machines.length >= 1) {
                 return res.status(200).json(Machines);
-            } else {
-                return res.status(400).json(Machines);
             }
 
+        } catch (error) {
+            return res.status(400).json({ msg: error.message });
+        }
+    },
+
+    async sendEmail(req, res) {
+        const { email, ordem } = req.body
+        try {
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.office365.com',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: 'barbozagarcia@outlook.com',
+                    pass: '09041997!'
+                }
+            })
+
+            transporter.sendMail({
+                from: 'Loja Troca vidro <barbozagarcia@outlook.com>',
+                to: email,
+                subject: 'Ordem de serviço',
+                html: ordem
+            })
+            return res.status(200).json();
         } catch (error) {
             return res.status(400).json({ msg: error.message });
         }

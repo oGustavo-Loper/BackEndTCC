@@ -4,7 +4,11 @@ const DeviceModel = require('../models/DeviceModel')
 module.exports = {
     async index(req, res) {
         try {
-            const DeviceBrands = await DeviceBrand.findAll();
+            const DeviceBrands = await DeviceBrand.findAll({
+                relations: {
+                    DeviceModel: true
+                }
+            });
             return res.status(200).json(DeviceBrands);
         } catch (error) {
             return res.status(400).json({ msg: error.message });
@@ -34,18 +38,34 @@ module.exports = {
     //     return res.status(200).json(model);
 
     // },
+    // async indexByOrder(req, res) {
+    //     const { id } = req.params;
+    //     console.log("backend")
+    //     if (!id) {
+    //         return res.status(400).json({ error: error.message });
+    //     }
+    //     const model = await DeviceModel.findAll({ where: { DeviceBrand_id: id } });
+
+    //     return res.status(200).json(model);
+
+    // },
     async indexByOrder(req, res) {
-        const { id } = req.params;
+        try {
+            const { id } = req.params;
+            console.log("backend");
 
-        if (!id) {
-            return res.status(400).json({ error: error.message });
+            if (!id) {
+                return res.status(400).json({ error: 'ID is required' });
+            }
+
+            const models = await DeviceModel.findAll({ where: { DeviceBrand_id: id } });
+
+            return res.status(200).json(models);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: 'Internal server error' });
         }
-        const model = await DeviceModel.findAll({ where: { DeviceBrand_id: id } });
-
-        return res.status(200).json(model);
-
     },
-
 
     async destroy(req, res) {
         const { id } = req.params;

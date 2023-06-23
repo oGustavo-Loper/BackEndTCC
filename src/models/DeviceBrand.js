@@ -11,6 +11,9 @@ class DeviceBrand extends Model {
     static associate(models) {
         // this.hasMany(models.ServiceOrder, { foreignKey: "DeviceBrand_id", as: "ServicesOrdersBrands" }),
         this.hasMany(models.DeviceModel, { foreignKey: "DeviceBrand_id", as: "DeviceBrand" });
+        // this.hasMany(models.DeviceModel, {
+        //     onDelete: "cascade"
+        // })
     }
 }
 
